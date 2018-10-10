@@ -39,10 +39,12 @@ tf.flags.DEFINE_string(
 
 FLAGS = tf.flags.FLAGS
 
+
 def main(_):
-  print("Running Experiments Generator for experiment %s" % FLAGS.experiment)
-  tasks = generate_tasks_lib.GetTasks(FLAGS.experiment)
-  task_utils.WriteTasksToDirectories(FLAGS.workdir, tasks)
+    print("Running Experiments Generator for experiment %s" % FLAGS.experiment)
+    tasks = generate_tasks_lib.GetTasks(FLAGS.experiment)
+    task_utils.WriteTasksToDirectories(FLAGS.workdir, tasks)
+
 
 if __name__ == "__main__":
-  tf.app.run()
+    tf.app.run()

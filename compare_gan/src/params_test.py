@@ -26,13 +26,13 @@ import tensorflow as tf
 
 class ParamsTest(tf.test.TestCase):
 
-  def testParameterRanges(self):
-    training_parameters = params.GetParameters("WGAN", "wide")
-    self.assertEqual(len(list(training_parameters.keys())), 5)
+    def testParameterRanges(self):
+        training_parameters = params.GetParameters("WGAN", "wide")
+        self.assertEqual(len(list(training_parameters.keys())), 5)
 
-    training_parameters = params.GetParameters("BEGAN", "wide")
-    self.assertEqual(len(list(training_parameters.keys())), 6)
+        training_parameters = params.GetParameters("BEGAN", "wide")
+        self.assertEqual(len(list(training_parameters.keys())), 6)
 
 
 if __name__ == "__main__":
-  tf.test.main()
+    tf.test.main()

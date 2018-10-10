@@ -36,36 +36,38 @@ logging = tf.logging
 
 flags.DEFINE_string("workdir", "", "The working directory for all tasks.")
 flags.DEFINE_integer("task_num", 0, "The task number to use.")
-flags.DEFINE_string("command", "all", "What command to execute: all, train, eval.")
+flags.DEFINE_string(
+    "command", "all", "What command to execute: all, train, eval.")
 flags.DEFINE_bool("enable_tf_profile", False, "Whether to run TFProf.")
 
+
 def main(_):
-  tf.logging.set_verbosity(tf.logging.INFO)
-  task_workdir = os.path.join(FLAGS.workdir, str(FLAGS.task_num))
-  task = simple_task_pb2.Task()
-  with open(os.path.join(task_workdir, "task"), "r") as f:
-    text_format.Parse(f.read(), task)
+    tf.logging.set_verbosity(tf.logging.INFO)
+    task_workdir = os.path.join(FLAGS.workdir, str(FLAGS.task_num))
+    task = simple_task_pb2.Task()
+    with open(os.path.join(task_workdir, "task"), "r") as f:
+        text_format.Parse(f.read(), task)
 
-  options = task_utils.ParseOptions(task)
-  options["___workdir"] = task_workdir
+    options = task_utils.ParseOptions(task)
+    options["___workdir"] = task_workdir
 
-  task_string = text_format.MessageToString(task)
-  logging.info("\nWill run task\n%s\n\n", task_string)
+    task_string = text_format.MessageToString(task)
+    logging.info("\nWill run task\n%s\n\n", task_string)
 
-  if FLAGS.command in ["all", "train"]:
-    logging.info("\n====== Running training ======\n\n")
-    gan_lib.run_with_options(options, task_workdir)
+    if FLAGS.command in ["all", "train"]:
+        logging.info("\n====== Running training ======\n\n")
+        gan_lib.run_with_options(options, task_workdir)
 
-  if FLAGS.command in ["all", "eval"]:
-    logging.info("\n====== Running evaluation ======\n\n")
-    eval_gan_lib.RunTaskEval(
-        options, task_workdir,
-        tf.contrib.gan.eval.get_graph_def_from_disk(
-            os.path.join(FLAGS.dataset_root,
-                         "inceptionv1_for_inception_score.pb")))
+    if FLAGS.command in ["all", "eval"]:
+        logging.info("\n====== Running evaluation ======\n\n")
+        eval_gan_lib.RunTaskEval(
+            options, task_workdir,
+            tf.contrib.gan.eval.get_graph_def_from_disk(
+                os.path.join(FLAGS.dataset_root,
+                             "inceptionv1_for_inception_score.pb")))
 
-  logging.info("\n====== Task finished ======\n\n")
+    logging.info("\n====== Task finished ======\n\n")
 
 
 if __name__ == "__main__":
-  tf.app.run()
+    tf.app.run()

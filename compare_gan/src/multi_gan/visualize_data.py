@@ -38,36 +38,37 @@ FLAGS = flags.FLAGS
 
 
 def save_image(im, name):
-  im = im[:, :, 0] if im.shape[2] == 1 else im
-  imsave(os.path.join(FLAGS.save_dir, name), im)
+    im = im[:, :, 0] if im.shape[2] == 1 else im
+    imsave(os.path.join(FLAGS.save_dir, name), im)
 
 
 def main(unused_argv):
-  if not tf.gfile.IsDirectory(FLAGS.save_dir):
-    tf.gfile.MakeDirs(FLAGS.save_dir)
+    if not tf.gfile.IsDirectory(FLAGS.save_dir):
+        tf.gfile.MakeDirs(FLAGS.save_dir)
 
-  with tf.Graph().as_default():
-    datasets = dataset.get_datasets()
-    dataset_content = datasets[FLAGS.dataset](
-        FLAGS.dataset, FLAGS.dataset_split, 4, 128 * 1024)
-    batched = dataset_content.batch(64)
-    batch_op = batched.make_one_shot_iterator().get_next()
+    with tf.Graph().as_default():
+        datasets = dataset.get_datasets()
+        dataset_content = datasets[FLAGS.dataset](
+            FLAGS.dataset, FLAGS.dataset_split, 4, 128 * 1024)
+        batched = dataset_content.batch(64)
+        batch_op = batched.make_one_shot_iterator().get_next()
 
-    with tf.Session() as session:
-      data = session.run(batch_op)[0]
+        with tf.Session() as session:
+            data = session.run(batch_op)[0]
 
-  if not FLAGS.grid:
-    for i in range(data.shape[0]):
-      save_image(data[i], FLAGS.dataset + "_%d.png" % i)
-  else:
-    grid_im = []
-    for i in range(8):
-      im_row = []
-      for j in range(8):
-        im_row.append(data[i * 8 + j])
-      grid_im.append(np.concatenate(im_row, axis=1))
-    grid_im = np.concatenate(grid_im, axis=0)
-    save_image(grid_im, FLAGS.dataset + "_grid.png")
+    if not FLAGS.grid:
+        for i in range(data.shape[0]):
+            save_image(data[i], FLAGS.dataset + "_%d.png" % i)
+    else:
+        grid_im = []
+        for i in range(8):
+            im_row = []
+            for j in range(8):
+                im_row.append(data[i * 8 + j])
+            grid_im.append(np.concatenate(im_row, axis=1))
+        grid_im = np.concatenate(grid_im, axis=0)
+        save_image(grid_im, FLAGS.dataset + "_grid.png")
+
 
 if __name__ == "__main__":
-  tf.app.run(main)
+    tf.app.run(main)

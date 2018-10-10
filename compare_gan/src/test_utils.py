@@ -24,19 +24,19 @@ import tensorflow as tf
 
 
 def load_fake_dataset(options, num_examples=100):
-  """Returns a fake dataset with with fake images and labels.
+    """Returns a fake dataset with with fake images and labels.
 
-  Args:
-    options: Dictionary with options. Must contain "input_height",
-        "input_width" and "c_dim".
-    num_examples: Number of examples to generate. You can always call
-        repeat() and the dataset to iterate for longer.
-  Returns:
-    `tf.data.Dataset` with `num_examples`. Each example is a tuple of an
-    image and a label. The image is a 3D tensor with value in [0, 1]. The label
-    is always 0.
-  """
-  image_shape = (num_examples, options["input_height"],
-                 options["input_width"], options["c_dim"])
-  return tf.data.Dataset.from_tensor_slices(
-      (np.random.uniform(size=image_shape), np.zeros(num_examples)))
+    Args:
+      options: Dictionary with options. Must contain "input_height",
+          "input_width" and "c_dim".
+      num_examples: Number of examples to generate. You can always call
+          repeat() and the dataset to iterate for longer.
+    Returns:
+      `tf.data.Dataset` with `num_examples`. Each example is a tuple of an
+      image and a label. The image is a 3D tensor with value in [0, 1]. The label
+      is always 0.
+    """
+    image_shape = (num_examples, options["input_height"],
+                   options["input_width"], options["c_dim"])
+    return tf.data.Dataset.from_tensor_slices(
+        (np.random.uniform(size=image_shape), np.zeros(num_examples)))
